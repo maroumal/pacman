@@ -62,7 +62,6 @@
             this.load.baseURL = 'https://maroumal.github.io/pacman/';
             this.load.crossOrigin = 'maroumal';
 
-            this.load.image('dot', 'assets/dot.png');
             this.load.image('ball', 'assets/ball.png');
             this.load.image('tiles', 'assets/pacman-tiles.png');
             this.load.spritesheet('monster', 'assets/monster.jpg', 20, 20);
@@ -83,14 +82,13 @@
             
             this.balls = this.add.physicsGroup();
             
-            this.map.createFromTiles(7, this.safetile, 'dot','ball', this.layer, this.dots,this.balls);
+            this.map.createFromTiles(7, this.safetile,'ball', this.layer, this.balls);
 
             //  The dots will need to be offset by 6px to put them back in the middle of the grid
-            this.dots.setAll('x', 6, false, false, 1);
-            this.dots.setAll('y', 6, false, false, 1);
+           
 
-            //this.balls('x', 5, false, false, 0);
-            //this.balls('y', 5, false, false, 0);
+            this.balls('x', 6, false, false, 1);
+            this.balls('y', 6, false, false, 1);
             
             //  Pacman should collide with everything except the safe tile
             this.map.setCollisionByExclusion([this.safetile], true, this.layer);
@@ -224,16 +222,6 @@
 
         },
 
-        eatDot: function (monster, dot) {
-
-            dot.kill();
-
-            if (this.dots.total === 0)
-            {
-                this.dots.callAll('revive');
-            }
-
-        },
         
           eatBall: function (monster, ball) {
 
@@ -249,7 +237,7 @@
         update: function () {
           
             this.physics.arcade.collide(this.monster, this.layer);
-            this.physics.arcade.overlap(this.monster, this.dots,this.balls,this.eatBall, this.eatDot, null, this);
+            this.physics.arcade.overlap(this.monster,this.balls,this.eatBall, null, this);
 
             this.marker.x = this.math.snapToFloor(Math.floor(this.monster.x), this.gridsize) / this.gridsize;
             this.marker.y = this.math.snapToFloor(Math.floor(this.monster.y), this.gridsize) / this.gridsize;
