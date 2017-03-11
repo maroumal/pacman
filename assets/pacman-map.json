@@ -20,11 +20,11 @@
  "tilesets":[
         {
          "firstgid":1,
-         "image":"..\/sea.jpg",
-         "imageheight":62,
-         "imagewidth":294,
+         "image":"..\/pacman-tiles.png",
+         "imageheight":48,
+         "imagewidth":256,
          "margin":0,
-         "name":"sea",
+         "name":"pacman-tiles",
          "properties":
             {
 
