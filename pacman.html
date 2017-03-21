@@ -24,7 +24,7 @@
     var score = 0;
     var scoreText;
         
-    var game = new Phaser.Game(250, 230, Phaser.AUTO);
+    var game = new Phaser.Game(448, 496, Phaser.AUTO);
     var Pacman = function (game) {
 
    
@@ -42,6 +42,7 @@
         this.current = Phaser.NONE;
         this.turning = Phaser.NONE;
     };
+        
     Pacman.prototype = {
         init: function () {
             this.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
@@ -50,6 +51,7 @@
             Phaser.Canvas.setImageRenderingCrisp(this.game.canvas);
             this.physics.startSystem(Phaser.Physics.ARCADE);
         },
+        
         preload: function () {
             //  We need this because the assets are on github pages
             //  Remove the next 2 lines if running locally
@@ -62,6 +64,7 @@
             this.load.tilemap('map', 'assets/pacman-map1.json', null, Phaser.Tilemap.TILED_JSON);
             //  Needless to say, graphics (C)opyright Namco
         },
+        
         create: function () {
             this.map = this.add.tilemap('map');
             this.map.addTilesetImage('pacman-tiles', 'tiles');
@@ -83,7 +86,7 @@
             this.pacman.play('munch');
             this.move(Phaser.LEFT);
             
-            scoreText = game.add.text(290, -5,'Score: 0', {font: '15px Verdana',  fill: '#FFFF00'});
+            scoreText = game.add.text(290, -5,'Score: 0', {font: '25px Verdana',  fill: '#FFFF00'});
         },
         
         checkKeys: function () {
