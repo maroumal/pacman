@@ -27,16 +27,20 @@
     var bonus=0;
     var bonusText;
         
-    var game = new Phaser.Game(448, 496, Phaser.AUTO);
+    var game = new Phaser.Game(500, 550, Phaser.AUTO);
     var Pacman = function (game) {
    
         this.map = null;
         this.layer = null;
         this.pacman = null;
+	    
         this.safetile = 14;
         this.gridsize = 16;
+	    
         this.speed = 100;
         this.threshold = 3;
+	this.turnSpeed = 200;
+	    
         this.marker = new Phaser.Point();
         this.turnPoint = new Phaser.Point();
         this.directions = [ null, null, null, null, null ];
@@ -71,8 +75,10 @@
         create: function () {
             this.map = this.add.tilemap('map');
             this.map.addTilesetImage('pacman-tiles', 'tiles');
+		
             this.layer = this.map.createLayer('Pacman');
             this.dots = this.add.physicsGroup();
+		
             this.map.createFromTiles(7, this.safetile, 'ball', this.layer, this.dots);
             this.map.createFromTiles(35, this.safetile, 'coin', this.layer, this.dots);
 		
@@ -86,7 +92,7 @@
             //  Position Pacman at grid location 14x17 (the +8 accounts for his anchor)
             this.pacman = this.add.sprite((14 * 16) + 8, (17 * 16) + 8, 'monster', 0);
             this.pacman.anchor.set(0.5);
-            this.pacman.animations.add('munch', [0, 1, 2, 1], 20, true);
+            //this.pacman.animations.add('munch', [0, 1, 2, 1], 20, true);
             this.physics.arcade.enable(this.pacman);
             this.pacman.body.setSize(16, 16, 0, 0);
             this.cursors = this.input.keyboard.createCursorKeys();
@@ -189,7 +195,7 @@
                 this.pacman.body.velocity.y = speed;
             }
             //  Reset the scale and angle (Pacman is facing to the right in the sprite sheet)
-            this.pacman.scale.x = 1;
+            /*this.pacman.scale.x = 1;
             this.pacman.angle = 0;
             if (direction === Phaser.LEFT)
             {
@@ -203,8 +209,29 @@
             {
                 this.pacman.angle = 90;
             }
+            this.current = direction;*/
+		
+	    this.add.tween(this.pacman).to( { angle: this.getAngle(direction) }, this.turnSpeed, "Linear", true);
             this.current = direction;
         },
+	    
+	      getAngle: function (to) {
+            
+            if (this.current === this.opposites[to])
+            {
+                return "180";
+            }
+            if ((this.current === Phaser.UP && to === Phaser.LEFT) ||
+                (this.current === Phaser.DOWN && to === Phaser.RIGHT) ||
+                (this.current === Phaser.LEFT && to === Phaser.DOWN) ||
+                (this.current === Phaser.RIGHT && to === Phaser.UP))
+            {
+                return "-90";
+            }
+            return "90";
+        },
+	    
+	    
         eatDot: function (pacman, dot) {
             dot.kill();
             var audio = new Audio('assets/move.mp3');
