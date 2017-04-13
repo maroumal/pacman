@@ -61,7 +61,7 @@
             this.load.crossOrigin = 'maroumal';
             
             this.load.image('ball', 'assets/ball.png');
-            this.load.image('coin', 'assets/coin.jpg');
+            //this.load.image('coin', 'assets/coin.jpg');
             this.load.image('tiles', 'assets/pacman-tiles.png');
             this.load.spritesheet('monster', 'assets/monster.jpg', 29, 29);
             this.load.tilemap('map', 'assets/pacman-map1.json', null, Phaser.Tilemap.TILED_JSON);
@@ -73,7 +73,7 @@
             this.map.addTilesetImage('pacman-tiles', 'tiles');
             this.layer = this.map.createLayer('Pacman');
             this.dots = this.add.physicsGroup
-            this.coins = this.add.physicsGroup();
+            //this.coins = this.add.physicsGroup();
             this.map.createFromTiles(7, this.safetile, 'ball', this.layer, this.dots);
             this.map.createFromTiles(7, this.safetile, 'coin', this.layer, this.coins);
             //  The dots will need to be offset by 6px to put them back in the middle of the grid
@@ -82,6 +82,7 @@
             
             //this.coins('x', 6, false, false, 1);
             //this.coins('y', 6, false, false, 1);
+            
             //  Pacman should collide with everything except the safe tile
             this.map.setCollisionByExclusion([this.safetile], true, this.layer);
             //  Position Pacman at grid location 14x17 (the +8 accounts for his anchor)
@@ -203,20 +204,20 @@
                 this.dots.callAll('revive');
             }
             
-       eatCoin: function (pacman, coin) {
+       /*eatCoin: function (pacman, coin) {
             coin.kill();           
             bonus += 100;
             bonusText.text = 'Bonus: ' + bonus;
             if (this.coins.total === 0)
             {
                 this.coins.callAll('revive');
-            }
+            }*/
         },
         update: function () {
           
             this.physics.arcade.collide(this.pacman, this.layer);
             this.physics.arcade.overlap(this.pacman, this.dots, this.eatDot, null, this);
-            this.physics.arcade.overlap(this.pacman, this.coins, this.eatCoin, null, this);
+            //this.physics.arcade.overlap(this.pacman, this.coins, this.eatCoin, null, this);
             this.marker.x = this.math.snapToFloor(Math.floor(this.pacman.x), this.gridsize) / this.gridsize;
             this.marker.y = this.math.snapToFloor(Math.floor(this.pacman.y), this.gridsize) / this.gridsize;
             //  Update our grid sensors
