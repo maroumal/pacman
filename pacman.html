@@ -24,23 +24,16 @@
     var score = 0;
     var scoreText;
         
-    var bonus=0;
-    var bonusText;
-        
-    var game = new Phaser.Game(500, 550, Phaser.AUTO);
+    var game = new Phaser.Game(448, 496, Phaser.AUTO);
     var Pacman = function (game) {
    
         this.map = null;
         this.layer = null;
         this.pacman = null;
-	    
         this.safetile = 14;
         this.gridsize = 16;
-	    
-        this.speed = 100;
+        this.speed = 150;
         this.threshold = 3;
-	this.turnSpeed = 200;
-	    
         this.marker = new Phaser.Point();
         this.turnPoint = new Phaser.Point();
         this.directions = [ null, null, null, null, null ];
@@ -63,8 +56,7 @@
             //  Remove the next 2 lines if running locally
             this.load.baseURL = 'https://maroumal.github.io/pacman/';
             this.load.crossOrigin = 'maroumal';
-          
-            this.load.image('coin', 'assets/coin.jpg');
+            
             this.load.image('ball', 'assets/ball.png');
             this.load.image('tiles', 'assets/pacman-tiles.png');
             this.load.spritesheet('monster', 'assets/monster.jpg', 29, 29);
@@ -75,51 +67,26 @@
         create: function () {
             this.map = this.add.tilemap('map');
             this.map.addTilesetImage('pacman-tiles', 'tiles');
-		
             this.layer = this.map.createLayer('Pacman');
             this.dots = this.add.physicsGroup();
-		
             this.map.createFromTiles(7, this.safetile, 'ball', this.layer, this.dots);
-            this.map.createFromTiles(35, this.safetile, 'coin', this.layer, this.dots);
-		
             //  The dots will need to be offset by 6px to put them back in the middle of the grid
             this.dots.setAll('x', 6, false, false, 1);
             this.dots.setAll('y', 6, false, false, 1);
-		
             //  Pacman should collide with everything except the safe tile
             this.map.setCollisionByExclusion([this.safetile], true, this.layer);
-		
             //  Position Pacman at grid location 14x17 (the +8 accounts for his anchor)
             this.pacman = this.add.sprite((14 * 16) + 8, (17 * 16) + 8, 'monster', 0);
             this.pacman.anchor.set(0.5);
-            //this.pacman.animations.add('munch', [0, 1, 2, 1], 20, true);
+            this.pacman.animations.add('munch', [0, 1, 2, 1], 20, true);
             this.physics.arcade.enable(this.pacman);
             this.pacman.body.setSize(16, 16, 0, 0);
             this.cursors = this.input.keyboard.createCursorKeys();
             this.pacman.play('munch');
             this.move(Phaser.LEFT);
             
-            scoreText = game.add.text(0,500,'Score: 0', {font: '15px Verdana',  fill: '#FFFF00'});
-            
-            lives = game.add.group();
-            game.add.text(game.world.width - 340, 500, 'Lives : ', {font: '20px Verdana',  fill: '#FFFF00' });
-            
-            bonusText = game.add.text(370, 500,'Bonus: 0', {font: '20px Verdana',  fill: '#FFFF00'});
-            
-             for (var i = 0; i < 3; i++) 
-		    {
-			var pacman = lives.create(game.world.width - 235 + (30 * i), 517, 'pacman');
-			pacman.anchor.setTo(0.5, 0.5);
-			pacman.angle = 90;
-			pacman.alpha = 0.4;
-		    }	
-            
-           
-	        var sprite2=game.add.sprite(18,18,'coin');
-	       	sprite.alpha =0;
-	        game.add.tween(sprite).to( { alpha: 1 }, 2000, Phaser.Easing.Linear.None, true, 0, 1000, true);
-	        
-            },
+            scoreText = game.add.text(5, 0,'Score: 0', {font: '15px Verdana',  fill: '#FFFF00'});
+        },
         
         checkKeys: function () {
             if (this.cursors.left.isDown && this.current !== Phaser.LEFT)
@@ -194,7 +161,7 @@
                 this.pacman.body.velocity.y = speed;
             }
             //  Reset the scale and angle (Pacman is facing to the right in the sprite sheet)
-            /*this.pacman.scale.x = 1;
+            this.pacman.scale.x = 1;
             this.pacman.angle = 0;
             if (direction === Phaser.LEFT)
             {
@@ -208,29 +175,8 @@
             {
                 this.pacman.angle = 90;
             }
-            this.current = direction;*/
-		
-	    this.add.tween(this.pacman).to( { angle: this.getAngle(direction) }, this.turnSpeed, "Linear", true);
             this.current = direction;
         },
-	    
-	      getAngle: function (to) {
-            
-            if (this.current === this.opposites[to])
-            {
-                return "180";
-            }
-            if ((this.current === Phaser.UP && to === Phaser.LEFT) ||
-                (this.current === Phaser.DOWN && to === Phaser.RIGHT) ||
-                (this.current === Phaser.LEFT && to === Phaser.DOWN) ||
-                (this.current === Phaser.RIGHT && to === Phaser.UP))
-            {
-                return "-90";
-            }
-            return "90";
-        },
-	    
-	    
         eatDot: function (pacman, dot) {
             dot.kill();
             var audio = new Audio('assets/move.mp3');
@@ -241,26 +187,13 @@
             {
                 this.dots.callAll('revive');
             }
-            
-         eatCoin: function(pacman,coin){
-            coin.kill();
-	    score+=20;
-            scoreText.text= 'Score: ' + score;
-            bonus+=100;
-            bonusText.text= 'Bonus: ' + bonus;
-            if(this.coins.total===0)
-            {
-                this.coins.callAll('revive');
-            }
         },
         update: function () {
           
             this.physics.arcade.collide(this.pacman, this.layer);
             this.physics.arcade.overlap(this.pacman, this.dots, this.eatDot, null, this);
-            this.physics.arcade.overlap(this.pacman, this.dots, this.eatCoin, null, this);
             this.marker.x = this.math.snapToFloor(Math.floor(this.pacman.x), this.gridsize) / this.gridsize;
             this.marker.y = this.math.snapToFloor(Math.floor(this.pacman.y), this.gridsize) / this.gridsize;
-		
             //  Update our grid sensors
             this.directions[1] = this.map.getTileLeft(this.layer.index, this.marker.x, this.marker.y);
             this.directions[2] = this.map.getTileRight(this.layer.index, this.marker.x, this.marker.y);
