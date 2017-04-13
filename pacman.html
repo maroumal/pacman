@@ -25,7 +25,7 @@
     var scoreText;
         
     var bonus=0;
-	var bonusText='';
+    var bonusText;
         
     var game = new Phaser.Game(448, 496, Phaser.AUTO);
     var Pacman = function (game) {
@@ -35,7 +35,7 @@
         this.pacman = null;
         this.safetile = 14;
         this.gridsize = 16;
-        this.speed = 150;
+        this.speed = 100;
         this.threshold = 3;
         this.marker = new Phaser.Point();
         this.turnPoint = new Phaser.Point();
@@ -75,11 +75,14 @@
             this.dots = this.add.physicsGroup();
             this.map.createFromTiles(7, this.safetile, 'ball', this.layer, this.dots);
             this.map.createFromTiles(35, this.safetile, 'coin', this.layer, this.dots);
+		
             //  The dots will need to be offset by 6px to put them back in the middle of the grid
             this.dots.setAll('x', 6, false, false, 1);
             this.dots.setAll('y', 6, false, false, 1);
+		
             //  Pacman should collide with everything except the safe tile
             this.map.setCollisionByExclusion([this.safetile], true, this.layer);
+		
             //  Position Pacman at grid location 14x17 (the +8 accounts for his anchor)
             this.pacman = this.add.sprite((14 * 16) + 8, (17 * 16) + 8, 'monster', 0);
             this.pacman.anchor.set(0.5);
@@ -93,9 +96,9 @@
             scoreText = game.add.text(5, 0,'Score: 0', {font: '15px Verdana',  fill: '#FFFF00'});
             
             lives = game.add.group();
-            game.add.text(game.world.width - 340, 500, 'Lives : ', {font: '20px Verdana',  fill: '#FFFF00' });
+            game.add.text(game.world.width - 34, 50, 'Lives : ', {font: '20px Verdana',  fill: '#FFFF00' });
             
-            bonusText = game.add.text(5, 0,'Bonus: 0', {font: '20px Verdana',  fill: '#FFFF00'});
+            bonusText = game.add.text(50, 100,'Bonus: 0', {font: '20px Verdana',  fill: '#FFFF00'});
             
              for (var i = 0; i < 3; i++) 
 		    {
@@ -215,10 +218,10 @@
             
             eatCoin: function(pacman,coin){//pente
             coin.kill();
-	        this.score+=20;
-            this.scoreText.text= 'Score: ' + this.score;
-            this.bonus+=100;
-            this.bonusText.text= 'Bonus: ' + this.bonus;
+	    score+=20;
+            scoreText.text= 'Score: ' + score;
+            bonus+=100;
+            bonusText.text= 'Bonus: ' + bonus;
             if(this.coins.total===0)
             {
                 this.coins.callAll('revive');
@@ -231,6 +234,7 @@
             this.physics.arcade.overlap(this.pacman, this.dots, this.eatCoin, null, this);
             this.marker.x = this.math.snapToFloor(Math.floor(this.pacman.x), this.gridsize) / this.gridsize;
             this.marker.y = this.math.snapToFloor(Math.floor(this.pacman.y), this.gridsize) / this.gridsize;
+		
             //  Update our grid sensors
             this.directions[1] = this.map.getTileLeft(this.layer.index, this.marker.x, this.marker.y);
             this.directions[2] = this.map.getTileRight(this.layer.index, this.marker.x, this.marker.y);
