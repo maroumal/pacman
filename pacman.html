@@ -24,6 +24,9 @@
     var score = 0;
     var scoreText;
         
+    var bonus=0;
+	var bonusText='';
+        
     var game = new Phaser.Game(448, 496, Phaser.AUTO);
     var Pacman = function (game) {
    
@@ -56,7 +59,8 @@
             //  Remove the next 2 lines if running locally
             this.load.baseURL = 'https://maroumal.github.io/pacman/';
             this.load.crossOrigin = 'maroumal';
-            
+          
+            this.load.image('coin', 'assets/coin.jpg');
             this.load.image('ball', 'assets/ball.png');
             this.load.image('tiles', 'assets/pacman-tiles.png');
             this.load.spritesheet('monster', 'assets/monster.jpg', 29, 29);
@@ -70,6 +74,7 @@
             this.layer = this.map.createLayer('Pacman');
             this.dots = this.add.physicsGroup();
             this.map.createFromTiles(7, this.safetile, 'ball', this.layer, this.dots);
+            this.map.createFromTiles(35, this.safetile, 'coin', this.layer, this.dots);
             //  The dots will need to be offset by 6px to put them back in the middle of the grid
             this.dots.setAll('x', 6, false, false, 1);
             this.dots.setAll('y', 6, false, false, 1);
@@ -86,7 +91,27 @@
             this.move(Phaser.LEFT);
             
             scoreText = game.add.text(5, 0,'Score: 0', {font: '15px Verdana',  fill: '#FFFF00'});
-        },
+            
+            lives = game.add.group();
+            game.add.text(game.world.width - 340, 500, 'Lives : ', {font: '20px Verdana',  fill: '#FFFF00' });
+            
+            bonusText = game.add.text(5, 0,'Bonus: 0', {font: '20px Verdana',  fill: '#FFFF00'});
+            
+             for (var i = 0; i < 3; i++) 
+		    {
+			var pacman = lives.create(game.world.width - 235 + (30 * i), 517, 'pacman');
+			pacman.anchor.setTo(0.5, 0.5);
+			pacman.angle = 90;
+			pacman.alpha = 0.4;
+		    }	
+            
+            var sprite = game.add.sprite(417, 465, 'str');
+	        var sprite2=game.add.sprite(18,18,'coin');
+	        sprite2.alpha=0;
+	        sprite.alpha =0;
+	        game.add.tween(sprite).to( { alpha: 1 }, 2000, Phaser.Easing.Linear.None, true, 0, 1000, true);
+	        game.add.tween(sprite2).to( { alpha: 1 }, 2000, Phaser.Easing.Linear.None, true, 0, 1000, true);
+            },
         
         checkKeys: function () {
             if (this.cursors.left.isDown && this.current !== Phaser.LEFT)
@@ -187,11 +212,23 @@
             {
                 this.dots.callAll('revive');
             }
+            
+            eatCoin: function(pacman,coin){//pente
+            coin.kill();
+	        this.score+=20;
+            this.scoreText.text= 'Score: ' + this.score;
+            this.bonus+=100;
+            this.bonusText.text= 'Bonus: ' + this.bonus;
+            if(this.coins.total===0)
+            {
+                this.coins.callAll('revive');
+            }
         },
         update: function () {
           
             this.physics.arcade.collide(this.pacman, this.layer);
             this.physics.arcade.overlap(this.pacman, this.dots, this.eatDot, null, this);
+            this.physics.arcade.overlap(this.pacman, this.dots, this.eatCoin, null, this);
             this.marker.x = this.math.snapToFloor(Math.floor(this.pacman.x), this.gridsize) / this.gridsize;
             this.marker.y = this.math.snapToFloor(Math.floor(this.pacman.y), this.gridsize) / this.gridsize;
             //  Update our grid sensors
