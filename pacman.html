@@ -28,8 +28,8 @@
     var bonus =0;
     var bonusText;
         
-    var lives = 0;
-    var livesText;
+  //  var lives = 0;
+  //var livesText;
         
     var game = new Phaser.Game(448, 496, Phaser.AUTO);
     var Pacman = function (game) {
@@ -66,6 +66,7 @@
             
             this.load.image('ball', 'assets/ball.png');
             this.load.image('tiles', 'assets/pacman-tiles.png');
+            this.load.image('coin', 'assets/coin.jpg');
             this.load.spritesheet('monster', 'assets/monster.jpg', 29, 29);
             this.load.tilemap('map', 'assets/pacman-map1.json', null, Phaser.Tilemap.TILED_JSON);
             //  Needless to say, graphics (C)opyright Namco
@@ -77,6 +78,7 @@
             this.layer = this.map.createLayer('Pacman');
             this.dots = this.add.physicsGroup();
             this.map.createFromTiles(7, this.safetile, 'ball', this.layer, this.dots);
+            this.map.createFromTiles(35, this.safetile, 'coin', this.layer, this.dots);
             //  The dots will need to be offset by 6px to put them back in the middle of the grid
             this.dots.setAll('x', 6, false, false, 1);
             this.dots.setAll('y', 6, false, false, 1);
@@ -98,9 +100,24 @@
             bonusText = game.add.text(350, 465,'Bonus: 0', {font: '20px Verdana',  fill: 'orange'});
             
             
-            livesText = game.add.text(5,465,'Lives: 0',{font: '20px Verdana', fill: 'white'});
+           // livesText = game.add.text(5,465,'Lives: 0',{font: '20px Verdana', fill: 'white'});
             
-         
+           lives = game.add.group();
+           game.add.text(game.world.width 5, 465, 'Lives : ', { font: '20px Verdana', fill: 'white' });
+	    
+           for (var i = 0; i < 3; i++) 
+		    {
+		   var pacman = lives.create(game.world.width - 235 + (30 * i), 517, 'pacman');
+		   pacman.anchor.setTo(0.5, 0.5);
+		   pacman.angle = 90;
+		   pacman.alpha = 0.4;
+		    }	
+            
+           var sprite=game.add.sprite(18,18,'coin');
+           game.add.tween(sprite).to( { alpha: 0 }, 30000, Phaser.Easing.Linear.None, true);
+            
+            
+            
         },
         
         checkKeys: function () {
@@ -203,9 +220,17 @@
                 this.dots.callAll('revive');
             }
         },
-        update: function () {
+        
+        
+        
+        eatCoin: function(pacman,coin){
+            coin.kill();
+	        score += 10;
+            scoreText.text= 'Score: ' + score;
+            update: function () {
           
             this.physics.arcade.collide(this.pacman, this.layer);
+            this.physics.arcade.overlap(this.pacman, this.dots, this.eatCoin, null, this);
             this.physics.arcade.overlap(this.pacman, this.dots, this.eatDot, null, this);
             this.marker.x = this.math.snapToFloor(Math.floor(this.pacman.x), this.gridsize) / this.gridsize;
             this.marker.y = this.math.snapToFloor(Math.floor(this.pacman.y), this.gridsize) / this.gridsize;
