@@ -28,7 +28,7 @@
     var bonus =0;
     var bonusText;
         
-  //  var lives = 0;
+  //var lives = 0;
   //var livesText;
         
     var game = new Phaser.Game(448, 496, Phaser.AUTO);
@@ -109,10 +109,10 @@
             bonusText = game.add.text(350, 465,'Bonus: 0', {font: '20px Verdana',  fill: 'orange'});
             
             
-           // livesText = game.add.text(5,465,'Lives: 0',{font: '20px Verdana', fill: 'white'});
+           
             
            lives = game.add.group();
-           game.add.text(game.world.width 5, 465, 'Lives : ', { font: '20px Verdana', fill: 'white' });
+           livesText = game.add.text(5,465,'Lives: ',{font: '20px Verdana', fill: 'white'});
 	    
            for (var i = 0; i < 3; i++) 
 		    {
