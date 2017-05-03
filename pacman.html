@@ -1,4 +1,3 @@
-
 <!DOCTYPE HTML>
 <html>
 <head>
@@ -27,7 +26,7 @@
         
     var bonus =0;
     var bonusText;
-        
+
     var lives = 0;
     var livesText;
         
@@ -66,7 +65,6 @@
             
             this.load.image('ball', 'assets/ball.png');
             this.load.image('tiles', 'assets/pacman-tiles.png');
-            //this.load.image('coin', 'assets/coin.jpg');
             this.load.spritesheet('monster', 'assets/monster.jpg', 29, 29);
             this.load.tilemap('map', 'assets/pacman-map1.json', null, Phaser.Tilemap.TILED_JSON);
             //  Needless to say, graphics (C)opyright Namco
@@ -77,55 +75,29 @@
             this.map.addTilesetImage('pacman-tiles', 'tiles');
             this.layer = this.map.createLayer('Pacman');
             this.dots = this.add.physicsGroup();
-		
             this.map.createFromTiles(7, this.safetile, 'ball', this.layer, this.dots);
-            //this.map.createFromTiles(35, this.safetile, 'coin', this.layer, this.dots);
-		
             //  The dots will need to be offset by 6px to put them back in the middle of the grid
             this.dots.setAll('x', 6, false, false, 1);
             this.dots.setAll('y', 6, false, false, 1);
-		
             //  Pacman should collide with everything except the safe tile
             this.map.setCollisionByExclusion([this.safetile], true, this.layer);
-		
             //  Position Pacman at grid location 14x17 (the +8 accounts for his anchor)
             this.pacman = this.add.sprite((14 * 16) + 8, (17 * 16) + 8, 'monster', 0);
-		
             this.pacman.anchor.set(0.5);
-		
-            //this.pacman.animations.add('munch', [0, 1, 2, 1], 20, true);
-		
+            this.pacman.animations.add('munch', [0, 1, 2, 1], 20, true);
             this.physics.arcade.enable(this.pacman);
             this.pacman.body.setSize(16, 16, 0, 0);
             this.cursors = this.input.keyboard.createCursorKeys();
-		
-            //this.pacman.play('munch');
-		
+            this.pacman.play('munch');
             this.move(Phaser.LEFT);
             
-            scoreText = game.add.text(180, 0,'Score: 0', {font: '20px Verdana',  fill: 'yellow'});
+            scoreText = game.add.text(5, 0,'Score: 0', {font: '20px Verdana',  fill: 'yellow'});
             
             
-            bonusText = game.add.text(350, 465,'Bonus: 0', {font: '20px Verdana',  fill: 'orange'});
+            scoreBonus = game.add.text(340, 0,'Bonus: 0', {font: '20px Verdana',  fill: 'orange'});
+
             
-            
-            livesText = game.add.text(5,465,'Lives: ',{font: '20px Verdana', fill: 'white'});
-            
-           /*lives = game.add.group();
-           livesText = game.add.text(5,465,'Lives: ',{font: '20px Verdana', fill: 'white'});
-	    
-           for (var i = 0; i < 3; i++) 
-		    {
-		   var pacman = lives.create(game.world.width - 235 + (30 * i), 317, 'pacman');
-		   pacman.anchor.setTo(0.5, 0.5);
-		   pacman.angle = 90;
-		   pacman.alpha = 0.4;
-		    }	
-            
-           var sprite=game.add.sprite(18,20,'coin');
-           game.add.tween(sprite).to( { alpha: 0 }, 30000, Phaser.Easing.Linear.None, true);*/
-            
-            
+            livesText = game.add.text(5,465,'Lives: 0',{font: '20px Verdana', fill: 'white'});
             
         },
         
@@ -174,13 +146,11 @@
         turn: function () {
             var cx = Math.floor(this.pacman.x);
             var cy = Math.floor(this.pacman.y);
-		
             //  This needs a threshold, because at high speeds you can't turn because the coordinates skip past
             if (!this.math.fuzzyEqual(cx, this.turnPoint.x, this.threshold) || !this.math.fuzzyEqual(cy, this.turnPoint.y, this.threshold))
             {
                 return false;
             }
-		
             //  Grid align before turning
             this.pacman.x = this.turnPoint.x;
             this.pacman.y = this.turnPoint.y;
@@ -203,7 +173,6 @@
             {
                 this.pacman.body.velocity.y = speed;
             }
-		
             //  Reset the scale and angle (Pacman is facing to the right in the sprite sheet)
             this.pacman.scale.x = 1;
             this.pacman.angle = 0;
@@ -221,8 +190,6 @@
             }
             this.current = direction;
         },
-	    
-	    
         eatDot: function (pacman, dot) {
             dot.kill();
             var audio = new Audio('assets/move.mp3');
@@ -234,18 +201,9 @@
                 this.dots.callAll('revive');
             }
         },
-        
-        
-        
-       /* eatCoin: function(pacman,coin){
-            coin.kill();
-	    score += 10;
-            scoreText.text= 'Score: ' + score;
-            update: function ()
-	}*/
+        update: function () {
           
             this.physics.arcade.collide(this.pacman, this.layer);
-            //this.physics.arcade.overlap(this.pacman, this.dots, this.eatCoin, null, this);
             this.physics.arcade.overlap(this.pacman, this.dots, this.eatDot, null, this);
             this.marker.x = this.math.snapToFloor(Math.floor(this.pacman.x), this.gridsize) / this.gridsize;
             this.marker.y = this.math.snapToFloor(Math.floor(this.pacman.y), this.gridsize) / this.gridsize;
