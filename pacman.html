@@ -26,7 +26,7 @@
         this.pacman = null;
         this.safetile = 14;
         this.gridsize = 16;
-        this.speed = 150;
+        this.speed = 100;
         this.threshold = 3;
         this.marker = new Phaser.Point();
         this.turnPoint = new Phaser.Point();
@@ -222,8 +222,11 @@
 		     
             coin.kill();
 		     
-	    this.score+=10;
+	    this.score+=50;
             this.scoreText.text= 'Score: ' + this.score;
+		     
+            this.bonus-+100;
+            this.bonusText.text= 'Bonus: '+ this.bonus;
 	   
             if(this.coins.total===0)
             {
