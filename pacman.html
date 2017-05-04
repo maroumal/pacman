@@ -96,11 +96,11 @@
             this.scoreText = game.add.text(0, 500, 'Score: 0', { fontSize: '20px Arial', fill: 'yellow' });
             
             lives = game.add.group();
-            game.add.text(game.world.width - 320, 500, 'Lives : ', { fontSize: '20px Arial', fill: 'white' });
+            game.add.text(game.world.width - 330, 500, 'Lives : ', { fontSize: '20px Arial', fill: 'white' });
             
             for (var i = 0; i < 3; i++) 
 		    {
-			var pacman = lives.create(game.world.width - 235 + (30 * i), 517, 'monster');
+			var pacman = lives.create(game.world.width - 220 + (30 * i), 517, 'monster');
 			pacman.anchor.setTo(0.5, 0.5);
 			pacman.angle = 90;
 			pacman.alpha = 0.4;
