@@ -67,7 +67,7 @@
             this.dots = this.add.physicsGroup();
 		
             this.map.createFromTiles(7, this.safetile, 'ball', this.layer, this.dots);
-            this.map.createFromTiles(40, this.safetile, 'coin', this.layer, this.dots);
+            this.map.createFromTiles(35, this.safetile, 'coin', this.layer, this.dots);
 		
             //  The dots will need to be offset by 6px to put them back in the middle of the grid
             this.dots.setAll('x', 6, false, false, 1);
@@ -101,8 +101,8 @@
 		var sprite1 = game.add.sprite(317, 265, 'coin');
 		var sprite2 = game.add.sprite(300, 192, 'coin');
 	    
-	    game.add.tween(sprite).to( { alpha: 0 }, 30000, Phaser.Easing.Linear.None, true);
-	    game.add.tween(sprite1).to( { alpha: 0 }, 30000, Phaser.Easing.Linear.None, true);
+	    game.add.tween(sprite).to( { alpha: 0 }, 300, Phaser.Easing.Linear.None, true);
+	    game.add.tween(sprite1).to( { alpha: 0 }, 3000, Phaser.Easing.Linear.None, true);
             game.add.tween(sprite2).to( { alpha: 0 }, 30000, Phaser.Easing.Linear.None, true);
         
         },
