@@ -233,9 +233,9 @@
             this.scoreText.text= 'Score: ' + this.bonus;
             this.bonusText.text= 'Bonus: '+ this.bonus;
 	   
-            if(this.coins.total===0)
+            if(this.dots.total===0)
             {
-                this.coins.callAll('revive');
+                this.dots.callAll('revive');
             }
         },
         update: function () {
