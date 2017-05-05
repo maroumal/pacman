@@ -71,6 +71,8 @@
             this.layer = this.map.createLayer('Pacman');
 		
             this.dots = this.add.physicsGroup();
+            this.coins = this.add.physicsGroup();
+		
 		
             this.map.createFromTiles(7, this.safetile, 'ball', this.layer, this.dots);
             this.map.createFromTiles(34, this.safetile, 'coin', this.layer, this.dots);
@@ -78,6 +80,12 @@
             //  The dots will need to be offset by 6px to put them back in the middle of the grid
             this.dots.setAll('x', 6, false, false, 1);
             this.dots.setAll('y', 6, false, false, 1);
+		
+		
+		
+            this.coins.setAll('x', 6, false, false, 1);
+            this.coins.setAll('y', 6, false, false, 1);
+		
 		
 	   
             //  Pacman should collide with everything except the safe tile
@@ -108,15 +116,15 @@
 			pacman.angle = 90;
 			pacman.alpha = 0.4;
 		    }
-	    var sprite = game.add.sprite(417, 465, 'coin');
-	    var sprite1 = game.add.sprite(87, 265, 'coin');
-	    var sprite2 = game.add.sprite(300, 192, 'coin');
+	    //var sprite = game.add.sprite(417, 465, 'coin');
+	    //var sprite1 = game.add.sprite(87, 265, 'coin');
+	    //var sprite2 = game.add.sprite(300, 192, 'coin');
             
 		
 	    
-	    game.add.tween(sprite).to( { alpha: 0 }, 40000, Phaser.Easing.Linear.None, true);
-	    game.add.tween(sprite1).to( { alpha: 0 }, 40000, Phaser.Easing.Linear.None, true);
-            game.add.tween(sprite2).to( { alpha: 0 }, 40000, Phaser.Easing.Linear.None, true);
+	    //game.add.tween(sprite).to( { alpha: 0 }, 40000, Phaser.Easing.Linear.None, true);
+	    //game.add.tween(sprite1).to( { alpha: 0 }, 40000, Phaser.Easing.Linear.None, true);
+            //game.add.tween(sprite2).to( { alpha: 0 }, 40000, Phaser.Easing.Linear.None, true);
            
 
 	
@@ -242,7 +250,7 @@
           
             this.physics.arcade.collide(this.pacman, this.layer);
             this.physics.arcade.overlap(this.pacman, this.dots, this.eatDot, null, this);
-	    this.physics.arcade.overlap(this.pacman, this.dots, this.eatCoin, null, this);
+	    this.physics.arcade.overlap(this.pacman, this.coins, this.eatCoin, null, this);
             this.marker.x = this.math.snapToFloor(Math.floor(this.pacman.x), this.gridsize) / this.gridsize;
             this.marker.y = this.math.snapToFloor(Math.floor(this.pacman.y), this.gridsize) / this.gridsize;
             //  Update our grid sensors
