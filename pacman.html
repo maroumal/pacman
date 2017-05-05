@@ -75,7 +75,7 @@
 		
 		
             this.map.createFromTiles(7, this.safetile, 'ball', this.layer, this.dots);
-            this.map.createFromTiles(34, this.safetile, 'coin', this.layer, this.dots);
+            this.map.createFromTiles(35, this.safetile, 'coin', this.layer, this.coins);
 		
             //  The dots will need to be offset by 6px to put them back in the middle of the grid
             this.dots.setAll('x', 6, false, false, 1);
@@ -116,15 +116,15 @@
 			pacman.angle = 90;
 			pacman.alpha = 0.4;
 		    }
-	    var sprite = game.add.sprite(417, 465, 'coin');
-	    var sprite1 = game.add.sprite(87, 265, 'coin');
-	    var sprite2 = game.add.sprite(300, 192, 'coin');
+	    //var sprite = game.add.sprite(417, 465, 'coin');
+	    //var sprite1 = game.add.sprite(87, 265, 'coin');
+	    //var sprite2 = game.add.sprite(300, 192, 'coin');
             
 		
 	    
-	    game.add.tween(sprite).to( { alpha: 0 }, 40000, Phaser.Easing.Linear.None, true);
-	    game.add.tween(sprite1).to( { alpha: 0 }, 40000, Phaser.Easing.Linear.None, true);
-            game.add.tween(sprite2).to( { alpha: 0 }, 40000, Phaser.Easing.Linear.None, true);
+	    //game.add.tween(sprite).to( { alpha: 0 }, 40000, Phaser.Easing.Linear.None, true);
+	    //game.add.tween(sprite1).to( { alpha: 0 }, 40000, Phaser.Easing.Linear.None, true);
+            //game.add.tween(sprite2).to( { alpha: 0 }, 40000, Phaser.Easing.Linear.None, true);
            
 
 	
