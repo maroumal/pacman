@@ -63,6 +63,7 @@
             this.load.spritesheet('monster', 'assets/monster.jpg', 29, 29);
             this.load.tilemap('map', 'assets/pacman-map2.json', null, Phaser.Tilemap.TILED_JSON);
 	    this.load.image('coin','assets/coin.jpg');
+            this.load.image('cherry', 'assets/cherry.png');
             //  Needless to say, graphics (C)opyright Namco
         },
         create: function () {
@@ -72,10 +73,12 @@
 		
             this.dots = this.add.physicsGroup();
             this.coins = this.add.physicsGroup();
+	    this.cherries = this.add.physicsGroup();
 		
 		
             this.map.createFromTiles(7, this.safetile, 'ball', this.layer, this.dots);
             this.map.createFromTiles(35, this.safetile, 'coin', this.layer, this.coins);
+	    this.map.createFromTiles(35, this.safetile, 'cherry', this.layer, this.cherries);
 		
             //  The dots will need to be offset by 6px to put them back in the middle of the grid
             this.dots.setAll('x', 6, false, false, 1);
@@ -116,15 +119,15 @@
 			pacman.angle = 90;
 			pacman.alpha = 0.4;
 		    }
-	    //var sprite = game.add.sprite(417, 465, 'coin');
-	    //var sprite1 = game.add.sprite(87, 265, 'coin');
-	    //var sprite2 = game.add.sprite(300, 192, 'coin');
+	    var sprite = game.add.sprite(417, 465, 'cherry');
+	    var sprite1 = game.add.sprite(87, 265, 'cherry');
+	    var sprite2 = game.add.sprite(300, 192, 'cherry');
             
 		
 	    
-	     //game.add.tween(sprite).to( { alpha: 0 }, 40000, Phaser.Easing.Linear.None, true);
-	    //game.add.tween(sprite1).to( { alpha: 0 }, 40000, Phaser.Easing.Linear.None, true);
-            //game.add.tween(sprite2).to( { alpha: 0 }, 40000, Phaser.Easing.Linear.None, true);
+	    game.add.tween(sprite).to( { alpha: 0 }, 40000, Phaser.Easing.Linear.None, true);
+	    game.add.tween(sprite1).to( { alpha: 0 }, 40000, Phaser.Easing.Linear.None, true);
+            game.add.tween(sprite2).to( { alpha: 0 }, 40000, Phaser.Easing.Linear.None, true);
            
 
 	
